@@ -1,0 +1,48 @@
+springfox:
+  documentation:
+    swagger.v2.path: /swagger.json
+    info.version: project.version
+---
+spring:
+  main:
+    banner-mode: console
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    root: TRACE
+
+#configuracoes da aplicacao
+app:
+
+feign:
+  compression:
+    response:
+      enabled: true
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 30000
+  okhttp:
+    enabled: true
+  client:
+    config:
+      br:
+        com:
+          cooperativismo:
+            offlineconversion:
+              infrastructure:
+                graphapi:
+                  loggerLevel: basic
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000

@@ -1,0 +1,91 @@
+---
+#server
+server:
+  compression:
+    enabled: true
+  connection-timeout: 15s
+  undertow:
+    worker-threads: 128
+    io-threads: 8
+
+# configuracoes do swagger
+springfox:
+  documentation:
+    swagger.v2.path: /swagger.json
+    info.version: @project.version@
+
+---
+spring:
+  datasource:
+    url: ${app.cooperativo_db.url_banco_de_dados}
+    driverClassName: ${app.cooperativo_db.driver_banco_de_dados}
+    username: ${app.cooperativo_db.usuario_bando_de_dados}
+    password: ${app.cooperativo_db.senha_banco_de_dados}
+  main:
+    banner-mode: console
+  flyway:
+    enabled: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jackson.serialization.fail-on-empty-beans: false
+  jmx.enabled: false
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:127.0.0.1:9092}
+    listener:
+      ack-mode: record
+    producer:
+      acks: all
+      retries: 5
+      compression-type: snappy
+
+  level:
+    br.com.exemplo.api: info
+    org.springframework:
+      boot.context: trace
+      cache: error
+
+#configuracoes da aplicacao
+app:
+  cooperativo_db:
+    url_banco_de_dados: jdbc:sqlserver://localhost:1433;database=teste
+    driver_banco_de_dados: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    usuario_bando_de_dados: sa
+    senha_banco_de_dados: 123
+  user_info:
+    url: https://user-info.herokuapp.com/
+  kafka:
+    topics:
+      pauta: PAUTA
+
+feign:
+  compression:
+    response:
+      enabled: true
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 30000
+  okhttp:
+    enabled: true
+  client:
+    config:
+      br:
+        com:
+          cooperativismo:
+            offlineconversion:
+              infrastructure:
+                graphapi:
+                  loggerLevel: basic
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
