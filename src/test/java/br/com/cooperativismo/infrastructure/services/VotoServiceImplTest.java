@@ -21,14 +21,14 @@ public class VotoServiceImplTest {
     private VotoServiceImpl votoService;
     private VotoRepository votoRepository;
     private PautaRepository pautaRepository;
-    private UserInfoClient validarCpf;
+    private UserInfoClient userInfoClient;
 
     @Before
     public void initialize() {
         votoRepository = mock(VotoRepository.class);
         pautaRepository = mock(PautaRepository.class);
-        validarCpf = mock(UserInfoClient.class);
-        votoService = new VotoServiceImpl(votoRepository, pautaRepository, validarCpf);
+        userInfoClient = mock(UserInfoClient.class);
+        votoService = new VotoServiceImpl(votoRepository, pautaRepository, userInfoClient);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class VotoServiceImplTest {
         when(pautaRepository.countByNomePauta("Algum nome")).thenReturn((long) 1);
         when(pautaRepository.findPautaByNomePauta("Algum nome")).thenReturn(new PautaData().getPauta());
         when(votoRepository.countByCpfAndIdPauta("84868050079", 1)).thenReturn((long) 0);
-        when(validarCpf.validarCpf("84868050079")).thenReturn(new ResponseClient("UNABLE_TO_VOTE"));
+        when(userInfoClient.checkCpf("84868050079")).thenReturn(new ResponseClient("UNABLE_TO_VOTE"));
         VotoResponse response = votoService.saveVoto(new VotoRequest("Algum nome", Voto.OpcoesVoto.SIM, "84868050079"));
         assertTrue(response.getResponse().equalsIgnoreCase("CPF inválido (UNABLE_TO_VOTE)."));
     }

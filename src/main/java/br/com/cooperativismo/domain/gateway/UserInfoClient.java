@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserInfoClient {
 
     @GetMapping(value = "/{cpf}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseClient validarCpf(@PathVariable String cpf);
+    ResponseClient checkCpf(@PathVariable String cpf);
 
 }

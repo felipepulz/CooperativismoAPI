@@ -20,13 +20,13 @@ public class VotoServiceImpl implements VotoService {
 
     private final VotoRepository votoRepository;
     private final PautaRepository pautaRepository;
-    private UserInfoClient validarCpf;
+    private UserInfoClient userInfoClient;
 
     @Autowired
-    public VotoServiceImpl(VotoRepository votoRepository, PautaRepository pautaRepository, UserInfoClient validarCpf) {
+    public VotoServiceImpl(VotoRepository votoRepository, PautaRepository pautaRepository, UserInfoClient userInfoClient) {
         this.votoRepository = votoRepository;
         this.pautaRepository = pautaRepository;
-        this.validarCpf = validarCpf;
+        this.userInfoClient = userInfoClient;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class VotoServiceImpl implements VotoService {
             return new VotoResponse("Pauta já está encerrada.");
         }
 
-        ResponseClient response = this.validarCpf.validarCpf(request.getCpf());
+        ResponseClient response = this.userInfoClient.checkCpf(request.getCpf());
         if(response.getStatus().equalsIgnoreCase("UNABLE_TO_VOTE")){
             return new VotoResponse("CPF inválido (".concat(response.getStatus().concat(").")));
         }
